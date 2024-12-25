@@ -16,7 +16,7 @@ Para ejecutar este proyecto, necesitas tener instaladas las siguientes librería
 - `sqlite3`
 - `re`
 - `wave`
-- `tkinter`
+
 
 ## Instalación
 
