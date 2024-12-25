@@ -12,7 +12,7 @@ class VentanaMain:
         self.frame_botones.place(relx=0.0, rely=0.5, anchor="w")
         
         # Crear botones
-        self.boton_modulo1 = ctk.CTkButton(self.frame_botones, text="Módul 1", command=self.mostrar_modulo_1)
+        self.boton_modulo1 = ctk.CTkButton(self.frame_botones, text="Módulo 1", command=self.mostrar_modulo_1)
         self.boton_modulo2 = ctk.CTkButton(self.frame_botones, text="Módulo 2", command=self.mostrar_modulo_2)
         self.boton_modulo3 = ctk.CTkButton(self.frame_botones, text="Módulo 3", command=self.mostrar_modulo_3)
         
