@@ -11,6 +11,7 @@ from tkinter import ttk
 import db_manager 
 import time
 
+
 class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
     def __init__(self, parent):
         super().__init__(parent)
@@ -24,6 +25,7 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.filename = "transcription.txt"
         self.audio_thread = None
         self.no_audio_detected = False
+        self.processing = False
 
         #Base de datos
         self.db_manager = db_manager.DBManager("database_tendencias.db")
@@ -223,12 +225,22 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         wf.writeframes(b''.join(self.audio_frames))
         wf.close()
 
+    def update_progress_bar(self, duration):
+       from modulo_2 import AudioFileRecorderApp
+       AudioFileRecorderApp.update_progress_bar(self, duration)
+
     def transcribe_audio(self):
+        self.processing = True
         recognizer = sr.Recognizer()
         with sr.AudioFile("Audio.wav") as source:
             audio_data = recognizer.record(source)
+            duration = source.DURATION
             start_time = time.time()  # Start time for processing
             try:
+
+                # Inicia la barra de progreso
+                threading.Thread(target=self.update_progress_bar, args=(duration,), daemon=True).start()
+
                 transcription = recognizer.recognize_google(audio_data, language="es-ES")
                 self.text_area.insert("0.0", transcription)
                 self.save_button.configure(state="normal")
@@ -242,6 +254,7 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
             finally:
                 elapsed_time = time.time() - start_time  # Calculate elapsed time
                 print(f"Tiempo de procesamiento: {elapsed_time:.2f} segundos")  # Print elapsed time
+                self.processing = False
 
     def save_transcription(self):
         # Validar que los campos no estén vacíos
