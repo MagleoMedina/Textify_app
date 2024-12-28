@@ -181,7 +181,7 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.transcribe_audio()
 
         # Indicar que el proceso ha finalizado
-        self.status_label.configure(text="Grabación transcrita exitosamente", text_color="green")
+        #self.status_label.configure(text="Grabación transcrita exitosamente", text_color="green")
 
     def record_audio(self):
         chunk = 1024
@@ -227,21 +227,21 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         recognizer = sr.Recognizer()
         with sr.AudioFile("Audio.wav") as source:
             audio_data = recognizer.record(source)
-            duration = source.DURATION
+            start_time = time.time()  # Start time for processing
             try:
-                #barra de progreso en formato porcentaje
-                for i in range(10):
-                    percentage = (i/10)*100
-                    self.status_label.configure(text=f"Procesando grabación... {percentage}%", text_color="lightblue")
-                    self.update_idletasks()
-                    time.sleep(duration / 10)
                 transcription = recognizer.recognize_google(audio_data, language="es-ES")
                 self.text_area.insert("0.0", transcription)
                 self.save_button.configure(state="normal")
+                self.status_label.configure(text="Grabación transcrita exitosamente", text_color="green")
             except sr.UnknownValueError:
                 self.text_area.insert("0.0", "No se pudo transcribir el audio.")
+                self.status_label.configure(text="Ocurrió un error en la transcripción", text_color="lightcoral")
             except sr.RequestError as e:
                 self.text_area.insert("0.0", f"Error con el servicio de transcripción: {e}")
+                self.status_label.configure(text="Ocurrió un error en la transcripción", text_color="lightcoral")
+            finally:
+                elapsed_time = time.time() - start_time  # Calculate elapsed time
+                print(f"Tiempo de procesamiento: {elapsed_time:.2f} segundos")  # Print elapsed time
 
     def save_transcription(self):
         # Validar que los campos no estén vacíos
@@ -355,6 +355,16 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
             cedula_entry.grid(row=i, column=5, padx=5, pady=2)
 
     def toggle_autores_fields(self):
+        # Clear previous fields and labels
+        for widget in self.autores_frame.winfo_children():
+            widget.destroy()
+        for entry in self.cedula_entries_no:
+            entry[0].destroy()
+            entry[1].destroy()
+            entry[2].destroy()
+            entry[3].destroy()
+        self.cedula_entries_no.clear()
+
         if self.nuevo_usuario_var.get() == "si":
             self.num_autores_label.grid()
             self.num_autores_combobox.grid()
