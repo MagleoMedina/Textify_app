@@ -125,6 +125,8 @@ class AudioFileRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
             self.status_label.configure(text="", text_color="black")  # Set a valid color name
 
     def load_audio_file(self):
+        self.clear_inputs()
+        self.status_label.configure(text="")
         # Abrir un cuadro de diálogo para seleccionar el archivo
         self.filepath = filedialog.askopenfilename(filetypes=[("Archivos de audio", "*.wav *.mp3 *.flac *.ogg")])
         
