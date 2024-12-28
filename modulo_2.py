@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import os
+import threading
 import speech_recognition as sr
 import tkinter.messagebox as messagebox
 from tkcalendar import DateEntry  
@@ -18,6 +19,7 @@ class AudioFileRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
 
         # Variables
         self.filename = "transcription.txt"
+        self.processing = False
         
         #Base de datos
         self.db_manager = db_manager.DBManager("database_tendencias.db")
@@ -140,34 +142,55 @@ class AudioFileRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
             # Mostrar mensaje de éxito
             messagebox.showinfo("Archivo Cargado", f"Archivo cargado: {os.path.basename(self.filepath)}")
             # transcripción
-            self.transcribe_audio()
+            self.start_transcription_thread()
+
+    def update_progress_bar(self, duration):
+        #Actualizar barra de progreso en el hilo principal
+        steps = 20
+        for i in range(steps):
+            if not self.processing:
+                break  # Si se detiene el procesamiento, salir
+            percentage = ((i + 1) / steps) * 100
+            self.status_label.configure(text=f"Procesando grabación... {percentage:.0f}%", text_color="orange")
+            self.update_idletasks()
+            time.sleep(duration / steps)
 
     def transcribe_audio(self):
-        if not self.filepath:
-            messagebox.showerror("Error", "Primero debe cargar un archivo de audio.")
-            return
-
-        self.text_area.delete("1.0", "end")
+        #Procesar el audio en un hilo separado
+        self.processing = True
         recognizer = sr.Recognizer()
 
         try:
             with sr.AudioFile(self.filepath) as source:
-                
                 audio_data = recognizer.record(source)
                 duration = source.DURATION
-                #barra de progreso en formato porcentaje
-                for i in range(10):
-                    percentage = (i/10)*100
-                    self.status_label.configure(text=f"Procesando grabación... {percentage}%", text_color="lightblue")
-                    self.update_idletasks()
-                    time.sleep(duration / 10)
+
+                # Inicia la barra de progreso
+                threading.Thread(target=self.update_progress_bar, args=(duration,), daemon=True).start()
+
+                # Procesar la transcripción
                 self.transcription = recognizer.recognize_google(audio_data, language="es-ES")
                 self.text_area.insert("0.0", self.transcription)
-                self.save_button.configure(state="normal")
                 self.status_label.configure(text="Grabación transcrita exitosamente", text_color="green")
+                self.save_button.configure(state="normal")
         except Exception as e:
             self.text_area.insert("0.0", f"No se pudo transcribir el audio: {e}")
             self.status_label.configure(text="Transcripción fallida", text_color="red")
+        finally:
+            self.processing = False  # Indicar que el procesamiento ha finalizado
+
+    def start_transcription_thread(self):
+        #Iniciar hilo de procesamiento
+        if not self.filepath:
+            messagebox.showerror("Error", "Primero debe cargar un archivo de audio.")
+            return
+
+        if self.processing:
+            messagebox.showwarning("Aviso", "Ya se está procesando un archivo.")
+            return
+
+        threading.Thread(target=self.transcribe_audio, daemon=True).start()
+
     
     def clear_inputs(self):
         AudioRecorderApp.clear_inputs(self)
