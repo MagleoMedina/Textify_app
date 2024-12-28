@@ -21,7 +21,7 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         # Variables
         self.is_recording = False
         self.audio_frames = []
-        self.filepath = "transcription.txt"
+        self.filename = "transcription.txt"
         self.audio_thread = None
         self.no_audio_detected = False
 
@@ -290,9 +290,9 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
                     return
 
         # Guardar la transcripción en un archivo
-        with open(self.filepath, "w") as file:
+        with open(self.filename, "w") as file:
             file.write(self.text_area.get("1.0", "end-1c"))
-        messagebox.showinfo(title="Guardado", message=f"Transcripción guardada como {self.filepath} en su carpeta local")
+        messagebox.showinfo(title="Guardado", message=f"Transcripción guardada como {self.filename} en su carpeta local")
 
         # Obtener los datos de la interfaz
         tema = self.tema_combobox.get()
