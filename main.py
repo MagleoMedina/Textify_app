@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from modulo_1 import AudioRecorderApp  # Importar la clase del módulo 1
+from modulo_2 import AudioFileRecorderApp  # Importar la clase del módulo 2
 
 class VentanaMain:
     def __init__(self):
@@ -42,9 +43,9 @@ class VentanaMain:
         # Limpiar el frame antes de mostrar el contenido del módulo 2
         self.limpiar_frame_modulo()
         
-        # Aqui implementar el contenido del módulo 2
-        etiqueta = ctk.CTkLabel(self.frame_modulo, text="Módulo 2")
-        etiqueta.pack()    
+        # Crear una instancia de AudioFileRecorderApp dentro del frame_modulo
+        modulo_2_app = AudioFileRecorderApp(self.frame_modulo)
+        modulo_2_app.pack(fill="both", expand=True)
         
     def mostrar_modulo_3(self):
         # Limpiar el frame antes de mostrar el contenido del módulo 3
