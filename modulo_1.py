@@ -160,14 +160,7 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.num_autores_combobox.set("")
         self.num_autores_combobox_no.set("")
         self.text_area.delete("1.0", "end")
-        for widget in self.autores_frame.winfo_children():
-            widget.destroy()
-        for entry in self.cedula_entries_no:
-            entry[1].delete(0, "end")
-            entry[2].delete(0, "end")
-            entry[3].delete(0, "end")
-            entry[2].grid_remove()
-            entry[3].grid_remove()
+        self.toggle_autores_fields()
 
     def stop_recording(self):
         self.is_recording = False
