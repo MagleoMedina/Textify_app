@@ -202,6 +202,50 @@ class DBManager:
         result = self.fetch_all(query, (cedula,))
         return result[0][0] if result else None
 
+    def buscar_por_titulo(self, keyword):
+        """
+        Busca presentaciones cuyo título contiene la palabra clave (keyword), 
+        ignorando mayúsculas y minúsculas.
+        """
+        query = """
+        SELECT ID, Titulo, Fecha, Texto 
+        FROM Presentacion 
+        WHERE LOWER(Titulo) LIKE LOWER(?) 
+        """
+        keyword = f"%{keyword}%"  # Permitir búsqueda parcial
+        return self.fetch_all(query, (keyword,))
+        #return [resultado[0] for resultado in resultados] if resultados else []
+
+    def buscar_por_palabra_clave(self, keyword):
+        """
+        Busca presentaciones cuyo texto contiene la palabra clave (keyword),
+        devolviendo los títulos de dichas presentaciones.
+        """
+        query = """
+        SELECT ID, Titulo, Fecha, Texto 
+        FROM Presentacion 
+        WHERE LOWER(Texto) LIKE LOWER(?) 
+        """
+        keyword = f"%{keyword}%"  # Permitir búsqueda parcial
+        return self.fetch_all(query, (keyword,))
+        #return [resultado[0] for resultado in resultados] if resultados else []
+    
+    def obtener_presentaciones_por_nombre_tema(self, tema_nombre):
+        """
+        Obtiene todas las presentaciones cuyo tema coincide con el nombre dado.
+        :param tema_nombre: Nombre del tema a buscar (por ejemplo, "Moda").
+        :return: Una lista de registros que coincidan con el tema.
+        """
+        query = """
+        SELECT Presentacion.ID, Presentacion.Titulo, Presentacion.Fecha, Presentacion.Texto
+        FROM Presentacion
+        INNER JOIN Tema ON Presentacion.Tema = Tema.ID
+        WHERE Tema.Nombre = ?;
+        """
+        return self.fetch_all(query, (tema_nombre,))
+
+
+
 # Ejemplo de uso
 if __name__ == "__main__":
     db = DBManager("database_tendencias.db")
