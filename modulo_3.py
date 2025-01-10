@@ -39,13 +39,27 @@ class App(ctk.CTkFrame):
         self.resultados = ctk.CTkLabel(self, text="Resultados:")
         self.resultados.grid(row=2, column=0, sticky="w", padx=10)
 
-        # Widgets para mostrar los resultados
-        self.frame = ctk.CTkFrame(self, width=850, height=280)
-        self.frame.grid(row=3, columnspan=3, padx=10, pady=10, sticky="ew")
+        # Agregar un Canvas y Scrollbar para los resultados
+        self.canvas = ctk.CTkCanvas(self, width=850, height=280, bg='#333333', highlightthickness=0)
+        self.canvas.grid(row=3, columnspan=3, padx=10, pady=10, sticky="ew")
+
+        self.scrollbar = ctk.CTkScrollbar(self, orientation="vertical", command=self.canvas.yview)
+        self.scrollbar.grid(row=3, column=3, sticky="ns")
+
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+        self.scrollable_frame = ctk.CTkFrame(self.canvas, width=850)
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        # Configurar que el scrollable_frame ajuste su tamaño cuando se añadan widgets
+        self.scrollable_frame.bind(
+            "<Configure>", 
+            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        )
 
     def limpiar_frame(self):
         """Elimina todos los widgets del frame."""
-        for widget in self.frame.winfo_children():
+        for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
 
     def mostrar_resultados(self, resultados):
@@ -53,32 +67,38 @@ class App(ctk.CTkFrame):
         if resultados:
             for idx, (id_, titulo, _, texto) in enumerate(resultados):
                 # Mostrar el título
-                label = ctk.CTkLabel(self.frame, text=f"{idx + 1}. {titulo}")
+                label = ctk.CTkLabel(self.scrollable_frame, text=f"{idx + 1}. {titulo}")
                 label.grid(row=idx, column=0, padx=10, pady=5, sticky="w")
 
                 # Botón para ver el texto
-                ver_btn = ctk.CTkButton(self.frame, text="Ver", width=100,
+                ver_btn = ctk.CTkButton(self.scrollable_frame, text="Ver", width=100,
                                         command=lambda t=texto: self.ver_texto(t))
                 ver_btn.grid(row=idx, column=1, padx=5, pady=5)
 
                 # Botón para descargar el texto
-                descargar_btn = ctk.CTkButton(self.frame, text="Descargar", width=100,
+                descargar_btn = ctk.CTkButton(self.scrollable_frame, text="Descargar", width=100,
                                               command=lambda t=texto, title=titulo: self.descargar_texto(t, title))
                 descargar_btn.grid(row=idx, column=2, padx=5, pady=5)
         else:
-            no_result_label = ctk.CTkLabel(self.frame, text="No hay resultados.")
+            no_result_label = ctk.CTkLabel(self.scrollable_frame, text="No hay resultados.")
             no_result_label.pack(anchor="center", padx=10, pady=10)
 
     def ver_texto(self, texto):
         """Muestra el texto en una ventana de solo lectura."""
-        ventana = ctk.CTkToplevel(self)
+        ventana = ctk.CTkToplevel(self)  # Crear la ventana secundaria
         ventana.title("Texto")
         ventana.geometry("600x400")
+
+        # Configurar la ventana secundaria para que esté delante
+        ventana.transient(self)  # Establecer la ventana principal como padre
+        ventana.focus()  # Darle foco a la ventana secundaria
+        ventana.grab_set()  # Bloquear la interacción con la ventana principal hasta cerrar la secundaria
 
         texto_widget = ctk.CTkTextbox(ventana, width=580, height=380)
         texto_widget.insert("1.0", texto)
         texto_widget.configure(state="disabled")
         texto_widget.pack(padx=10, pady=10)
+
 
     def descargar_texto(self, texto, titulo):
         """Descarga el texto como un archivo TXT."""
@@ -114,11 +134,3 @@ class App(ctk.CTkFrame):
 
         self.limpiar_frame()  # Limpiar el frame antes de mostrar los resultados
         self.mostrar_resultados(resultados)
-
-
-# # Crear la app
-# if __name__ == "__main__":
-#     root = ctk.CTk()
-#     root.geometry("900x600")
-#     app = App(root)
-#     root.mainloop()
