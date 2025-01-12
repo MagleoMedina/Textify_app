@@ -6,12 +6,15 @@ from modulo_3 import App
 class VentanaMain:
     def __init__(self):
         self.root = ctk.CTk()
-        self.root.title("Ventana Principal")
+        self.root.title("Textify")
         self.root.geometry("1280x720")
         
         # Crear frame para botones
         self.frame_botones = ctk.CTkFrame(self.root)
         self.frame_botones.place(relx=0.0, rely=0.5, anchor="w")
+
+        # Establecer el icono de la ventana
+        self.root.iconbitmap("logoAudio.ico")  # Para .ico
         
         # Crear botones
         self.boton_modulo1 = ctk.CTkButton(self.frame_botones, text="Módulo 1", command=self.mostrar_modulo_1)
