@@ -59,7 +59,7 @@ class AudioFileRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         # Tema
         self.tema_label = ctk.CTkLabel(self.metadata_frame, text="Tema:")
         self.tema_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
-        self.tema_combobox = ttk.Combobox(self.metadata_frame, state="readonly")
+        self.tema_combobox = ctk.CTkComboBox(self.metadata_frame, state="readonly")
         self.tema_combobox.grid(row=0, column=1, padx=10, pady=5, sticky="w")
         self.populate_tema_combobox()
 
@@ -86,10 +86,20 @@ class AudioFileRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.nuevo_usuario_no = ctk.CTkRadioButton(self.metadata_frame, text="No", variable=self.nuevo_usuario_var, value="no", command=self.toggle_autores_fields)
         self.nuevo_usuario_no.grid(row=3, column=2, padx=10, pady=5, sticky="w")
 
+        # Crear un estilo personalizado para el Combobox
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure("TCombobox",
+                        fieldbackground="lightgray",  # Fondo del campo de entrada
+                        background="white",           # Fondo del desplegable
+                        foreground="blue",            # Color del texto
+                        borderwidth=2,                # Ancho del borde
+                        relief="solid",               # Estilo del borde
+                        font=("Helvetica", 12))       # Fuente y tamaño del texto
         # Número de Autores
         self.num_autores_label = ctk.CTkLabel(self.metadata_frame, text="Número de Autor/Autores:")
         self.num_autores_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
-        self.num_autores_combobox = ttk.Combobox(self.metadata_frame, values=list(range(1, 11)), state="readonly")
+        self.num_autores_combobox = ttk.Combobox(self.metadata_frame, values=list(range(1, 11)), state="readonly", style="TCombobox")
         self.num_autores_combobox.grid(row=4, column=1, padx=10, pady=5, sticky="w")
         self.num_autores_combobox.bind("<<ComboboxSelected>>", self.update_autores_fields)
 
