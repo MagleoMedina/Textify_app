@@ -1,0 +1,7 @@
+customtkinter
+tkcalendar
+speechrecognition
+pyaudio
+numpy
+audiofile
+tkcalendar
