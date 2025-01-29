@@ -7,6 +7,9 @@ class App(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
         self.pack(fill="both", expand=True)
+        
+        # Cambiar el color de fondo del frame principal a azul
+        self.configure(fg_color="#1E3A5F")
 
         # Base de datos
         self.db_manager = db_manager.DBManager("database_tendencias.db")
@@ -40,7 +43,7 @@ class App(ctk.CTkFrame):
         self.resultados.grid(row=2, column=0, sticky="w", padx=10)
 
         # Agregar un Canvas y Scrollbar para los resultados
-        self.canvas = ctk.CTkCanvas(self, width=850, height=280, bg='#333333', highlightthickness=0)
+        self.canvas = ctk.CTkCanvas(self, width=850, height=280, bg='#1E3A5F', highlightthickness=0)
         self.canvas.grid(row=3, columnspan=3, padx=10, pady=10, sticky="ew")
 
         self.scrollbar = ctk.CTkScrollbar(self, orientation="vertical", command=self.canvas.yview)
@@ -48,7 +51,7 @@ class App(ctk.CTkFrame):
 
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
-        self.scrollable_frame = ctk.CTkFrame(self.canvas, width=850)
+        self.scrollable_frame = ctk.CTkFrame(self.canvas, width=850, fg_color="#1E3A5F")
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
         # Configurar que el scrollable_frame ajuste su tamaño cuando se añadan widgets
@@ -67,7 +70,7 @@ class App(ctk.CTkFrame):
         if resultados:
             for idx, (id_, titulo, _, texto) in enumerate(resultados):
                 # Mostrar el título
-                label = ctk.CTkLabel(self.scrollable_frame, text=f"{idx + 1}. {titulo}")
+                label = ctk.CTkLabel(self.scrollable_frame, text=f"{idx + 1}. {titulo}", fg_color="#1E3A5F")
                 label.grid(row=idx, column=0, padx=10, pady=5, sticky="w")
 
                 # Botón para ver el texto
@@ -80,7 +83,7 @@ class App(ctk.CTkFrame):
                                               command=lambda t=texto, title=titulo: self.descargar_texto(t, title))
                 descargar_btn.grid(row=idx, column=2, padx=5, pady=5)
         else:
-            no_result_label = ctk.CTkLabel(self.scrollable_frame, text="No hay resultados.")
+            no_result_label = ctk.CTkLabel(self.scrollable_frame, text="No hay resultados.", fg_color="#1E3A5F")
             no_result_label.pack(anchor="center", padx=10, pady=10)
 
     def ver_texto(self, texto):
