@@ -29,7 +29,7 @@ class SplashScreen:
         self.root.geometry(f"{window_width}x{window_height}+{position_right}+{position_down}")
         
         # Hacer la ventana transparente
-        self.root.attributes("-transparentcolor", "#b2c4dc")
+        self.root.attributes("-transparentcolor", "#92d050")
 
         # Cargar y ajustar la imagen al tamaño de la ventana
         image_path = self.get_resource_path("logoAudio.png")
