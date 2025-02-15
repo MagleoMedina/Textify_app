@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from PIL import Image, ImageTk
 from modulo_1 import AudioRecorderApp  # Importar la clase del módulo 1
 from modulo_2 import AudioFileRecorderApp  # Importar la clase del módulo 2
 from modulo_3 import App
@@ -17,6 +18,7 @@ class VentanaMain:
         # Crear frame para botones dentro del frame principal
         self.frame_botones = ctk.CTkFrame(self.frame_principal, fg_color="#1E3A5F", corner_radius=0)
         self.frame_botones.pack(side="left", fill="y")
+        
         # Establecer el icono de la ventana
         self.root.iconbitmap("logoAudio.ico")  # Para .ico
         
@@ -47,11 +49,16 @@ class VentanaMain:
         self.boton_cerrar.grid(row=4, column=0, padx=10, pady=5, sticky="w")
         
         # Frames para los modulos dentro del frame principal
-        self.frame_modulo = ctk.CTkFrame(self.frame_principal)
-        self.frame_modulo.place(relx=0.5, rely=0.43, anchor="center", )
+        self.frame_modulo = ctk.CTkFrame(self.frame_principal, fg_color="white")
+        self.frame_modulo.place(relx=0.5, rely=0.43, anchor="center")
         
-        
-
+        # Cargar y mostrar la imagen en el frame_modulo
+        self.logo_image = Image.open("logoAudio.ico")
+        self.logo_image = self.logo_image.resize((260, 250), Image.LANCZOS)  # Ajustar el tamaño de la imagen
+        self.logo_photo = ImageTk.PhotoImage(self.logo_image)
+        self.logo_label = ctk.CTkLabel(self.frame_modulo, image=self.logo_photo, text="")
+        self.logo_label.pack(pady=20, padx=20, anchor="center", expand=True)  # Ajustar el padding y centrar          
+    
     def limpiar_frame_modulo(self):
         for widget in self.frame_modulo.winfo_children():
             widget.destroy()
@@ -88,4 +95,5 @@ class VentanaMain:
 
 if __name__ == "__main__":
     ventana = VentanaMain()
+    ventana.frame_modulo.place(relx=0.58, rely=0.43, anchor="center")  # Ajustar relx para mover a la derecha 
     ventana.run()
