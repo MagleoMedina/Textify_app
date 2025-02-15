@@ -28,17 +28,17 @@ class AudioFileRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.cedula_validation = self.register(self.validate_cedula)
 
         # Crear la interfaz
-        self.main_frame = ctk.CTkFrame(self, corner_radius=10)
+        self.main_frame = ctk.CTkFrame(self, corner_radius=10, fg_color="#1E3A5F")
         self.main_frame.pack(padx=20, pady=20, fill="both", expand=True)
 
         # Seccion 1: botones de control
-        self.controls_frame = ctk.CTkFrame(self.main_frame)
+        self.controls_frame = ctk.CTkFrame(self.main_frame, fg_color="#1E3A5F")
         self.controls_frame.grid(row=0, column=0, columnspan=2, pady=10)
 
-        self.load_button = ctk.CTkButton(self.controls_frame, text="Cargar Archivo de Audio", command=self.load_audio_file)
+        self.load_button = ctk.CTkButton(self.controls_frame, text="Cargar Archivo de Audio", command=self.load_audio_file, fg_color="#4CAF50")
         self.load_button.grid(row=0, column=0, padx=10, pady=10)
 
-        self.save_button = ctk.CTkButton(self.controls_frame, text="Guardar Transcripcion", command=self.save_transcription, state="disabled")
+        self.save_button = ctk.CTkButton(self.controls_frame, text="Guardar Transcripcion", command=self.save_transcription, state="disabled", fg_color="#2196F3")
         self.save_button.grid(row=0, column=2, padx=10, pady=10)
 
         # Seccion 2: Status de las etiquetas
@@ -49,12 +49,18 @@ class AudioFileRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.status_label.grid(row=0, column=0, pady=10)
 
         # Secccion 3: Area de texto de la transcripción
-        self.text_area = ctk.CTkTextbox(self.main_frame, width=600, height=150)
-        self.text_area.grid(row=2, column=0, columnspan=2, pady=10)
+        placeholder_text = "Esperando Archivo para editar..."
+
+        self.text_area = ctk.CTkTextbox(self.main_frame, width=455, height=70)
+        self.text_area.grid(row=2, column=0, columnspan=2, padx=20, pady=20)
 
         # Seccion 4: Metadata (Tema, Título, Fecha, Número de Autores)
-        self.metadata_frame = ctk.CTkFrame(self.main_frame)
-        self.metadata_frame.grid(row=3, column=0, columnspan=2, pady=10)
+        self.metadata_frame = ctk.CTkFrame(self.main_frame) # Se Cambio el tamaño
+        self.metadata_frame.grid(row=3, column=0, columnspan=2, pady=10) # Cambio la posición y los márgenes
+
+        self.text_area.insert("1.0", placeholder_text)
+        self.text_area.bind("<FocusIn>", lambda event: self.text_area.delete("1.0", "end") if self.text_area.get("1.0", "end-1c") == placeholder_text else None)
+        self.text_area.bind("<FocusOut>", lambda event: self.text_area.insert("1.0", placeholder_text) if not self.text_area.get("1.0", "end-1c") else None)
 
         # Tema
         self.tema_label = ctk.CTkLabel(self.metadata_frame, text="Tema:")
