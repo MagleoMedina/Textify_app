@@ -10,8 +10,9 @@ from modulo_3 import App
 
 class SplashScreen:
     def __init__(self, root):
+        ctk.set_appearance_mode("dark") 
         self.root = root
-        self.root.overrideredirect(True)  # Elimina bordes y barra de título
+        self.root.overrideredirect(True)  
         
         # Obtener el tamaño de la pantalla
         screen_width = self.root.winfo_screenwidth()
