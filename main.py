@@ -84,33 +84,33 @@ class VentanaMain:
         self.root.resizable(False, False)
 
         # Crear frame principal que ocupe toda la ventana y tenga fondo blanco
-        self.frame_principal = ctk.CTkFrame(self.root, fg_color="white", corner_radius=0)
+        self.frame_principal = ctk.CTkFrame(self.root, fg_color="#1E3A5F", corner_radius=0)
         self.frame_principal.pack(fill="both", expand=True)
 
         # Crear frame para botones dentro del frame principal
-        self.frame_botones = ctk.CTkFrame(self.frame_principal, fg_color="#1E3A5F", corner_radius=0)
+        self.frame_botones = ctk.CTkFrame(self.frame_principal, fg_color="#1E3A9F", corner_radius=0)
         self.frame_botones.pack(side="left", fill="y")
         
         # Establecer el icono de la ventana
         icon_path = self.get_resource_path("logoAudio.ico")
         self.root.iconbitmap(icon_path)  # Para .ico
         
-        self.title = ctk.CTkLabel(self.frame_botones, text="Textify", fg_color="#1E3A5F")
+        self.title = ctk.CTkLabel(self.frame_botones, text="Textify", fg_color="#1E3A9F")
         self.title.grid(row=0, column=0, padx=10, pady=5, sticky="w")
         # Crear enlaces
-        self.boton_modulo1 = ctk.CTkLabel(self.frame_botones, text="Grabar archivos de audio", fg_color="#1E3A5F", cursor="hand2")
+        self.boton_modulo1 = ctk.CTkLabel(self.frame_botones, text="Grabar archivos de audio", fg_color="#1E3A9F", cursor="hand2")
         self.boton_modulo1.bind("<Button-1>", lambda e: self.mostrar_modulo_1())
         self.boton_modulo1.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
-        self.boton_modulo2 = ctk.CTkLabel(self.frame_botones, text="Subir archivos de audio", fg_color="#1E3A5F", cursor="hand2")
+        self.boton_modulo2 = ctk.CTkLabel(self.frame_botones, text="Subir archivos de audio", fg_color="#1E3A9F", cursor="hand2")
         self.boton_modulo2.bind("<Button-1>", lambda e: self.mostrar_modulo_2())
         self.boton_modulo2.grid(row=1, column=0, padx=10, pady=5, sticky="w")
 
-        self.boton_modulo3 = ctk.CTkLabel(self.frame_botones, text="Buscar archivos subidos", fg_color="#1E3A5F", cursor="hand2")
+        self.boton_modulo3 = ctk.CTkLabel(self.frame_botones, text="Buscar archivos subidos", fg_color="#1E3A9F", cursor="hand2")
         self.boton_modulo3.bind("<Button-1>", lambda e: self.mostrar_modulo_3())
         self.boton_modulo3.grid(row=2, column=0, padx=10, pady=5, sticky="w")
         
-        self.boton_cerrar = ctk.CTkLabel(self.frame_botones, text="Cerrar aplicacion", fg_color="#1E3A5F", cursor="hand2")
+        self.boton_cerrar = ctk.CTkLabel(self.frame_botones, text="Cerrar aplicacion", fg_color="#1E3A9F", cursor="hand2")
         self.boton_cerrar.bind("<Button-1>", lambda e: self.cerrar_aplicacion())
         self.boton_cerrar.grid(row=3, column=0, padx=10, pady=5, sticky="w")
         
@@ -122,7 +122,7 @@ class VentanaMain:
         self.boton_cerrar.grid(row=4, column=0, padx=10, pady=5, sticky="w")
         
         # Frames para los modulos dentro del frame principal
-        self.frame_modulo = ctk.CTkFrame(self.frame_principal, fg_color="white")
+        self.frame_modulo = ctk.CTkFrame(self.frame_principal, fg_color="#1E3A5F")
         self.frame_modulo.place(relx=0.5, rely=0.43, anchor="center")
         
         # Cargar y mostrar la imagen en el frame_modulo
@@ -139,7 +139,6 @@ class VentanaMain:
     def mostrar_modulo_1(self):
         # Limpiar el frame antes de mostrar el contenido del módulo 1
         self.limpiar_frame_modulo()
-        
         # Crear una instancia de AudioRecorderApp dentro del frame_modulo
         modulo_1_app = AudioRecorderApp(self.frame_modulo)
         modulo_1_app.pack(fill="both", expand=True)
@@ -147,15 +146,12 @@ class VentanaMain:
     def mostrar_modulo_2(self):
         # Limpiar el frame antes de mostrar el contenido del módulo 2
         self.limpiar_frame_modulo()
-        
         # Crear una instancia de AudioFileRecorderApp dentro del frame_modulo
         modulo_2_app = AudioFileRecorderApp(self.frame_modulo)
         modulo_2_app.pack(fill="both", expand=True)
         
     def mostrar_modulo_3(self):
-        # Limpiar el frame antes de mostrar el contenido del módulo 3
         self.limpiar_frame_modulo()
-        
         # Aqui implementar el contenido del módulo 3
         modulo_3_app = App(self.frame_modulo)
         modulo_3_app.pack(fill="both", expand=True)
@@ -172,10 +168,10 @@ class VentanaMain:
         self.root.mainloop()
 
 if __name__ == "__main__":
-    splash_root = tk.Tk()
-    splash = SplashScreen(splash_root)
-    splash.show()
-    splash_root.mainloop()
+    #splash_root = tk.Tk()
+    #splash = SplashScreen(splash_root)
+    #splash.show()
+    #splash_root.mainloop()
     
     ventana = VentanaMain()
     ventana.frame_modulo.place(relx=0.58, rely=0.50, anchor="center")  # Ajustar relx para mover a la derecha 
