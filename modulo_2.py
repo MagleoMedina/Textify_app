@@ -16,7 +16,7 @@ class AudioFileRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.pack(fill="both", expand=True)
         #self.geometry("1280x720")  
         #self.resizable(False, False)
-
+          
         # Variables
         self.filename = "transcription.txt"
         self.processing = False
