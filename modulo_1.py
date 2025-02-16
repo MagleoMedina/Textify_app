@@ -34,26 +34,26 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.cedula_validation = self.register(self.validate_cedula)
 
         # Crear la interfaz
-        self.main_frame = ctk.CTkFrame(self, corner_radius=10, fg_color="#1E3A5F")
-        self.main_frame.pack(padx=20, pady=20, fill="both", expand=True)
+        self.main_frame = ctk.CTkFrame(self, corner_radius=0, fg_color="#1E3A5F")
+        self.main_frame.pack(padx=0, pady=0, fill="both", expand=True)
 
         # Seccion 1: botones de control
         self.controls_frame = ctk.CTkFrame(self.main_frame, fg_color="#1E3A5F" )
         self.controls_frame.grid(row=0, column=0, columnspan=3, pady=10)
 
         # Modificación de los botones
-        self.start_button = ctk.CTkButton(self.controls_frame, text="Empezar Grabación", command=self.start_recording, fg_color="#4CAF50")  # Cambia el color a un verde que combine
+        self.start_button = ctk.CTkButton(self.controls_frame, text="Empezar Grabación", command=self.start_recording, fg_color="#4CAF50", text_color="white")  # Cambia el color a un verde que combine
         self.start_button.grid(row=0, column=0, padx=10, pady=10)
 
-        self.stop_button = ctk.CTkButton(self.controls_frame, text="Detener Grabación", command=self.stop_recording, state="disabled", fg_color="#F44336")  # Rojo para detener
+        self.stop_button = ctk.CTkButton(self.controls_frame, text="Detener Grabación", command=self.stop_recording, state="disabled", fg_color="#F44336", text_color="white")  # Rojo para detener
         self.stop_button.grid(row=0, column=1, padx=10, pady=10)
 
-        self.save_button = ctk.CTkButton(self.controls_frame, text="Guardar Transcripción", command=self.save_transcription, state="disabled", fg_color="#2196F3")  # Azul para guardar
+        self.save_button = ctk.CTkButton(self.controls_frame, text="Guardar Transcripción", command=self.save_transcription, state="disabled", fg_color="#2196F3", text_color="white")  # Azul para guardar
         self.save_button.grid(row=0, column=2, padx=10, pady=10)
 
 
         # Seccion 2: Status de las etiquetas
-        self.status_frame = ctk.CTkFrame(self.main_frame)
+        self.status_frame = ctk.CTkFrame(self.main_frame, fg_color="#1E3A5F")
         self.status_frame.grid(row=1, column=0, columnspan=2, pady=10)
         
         self.status_label = ctk.CTkLabel(self.status_frame, text="", font=("Arial", 16))
@@ -61,8 +61,8 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
 
         # Secccion 3: Area de texto de la transcripción
         placeholder_text = "Esperando Archivo para editar..."
-
-        self.text_area = ctk.CTkTextbox(self.main_frame, width=455, height=70)  # Cambiar el tamaño
+        
+        self.text_area = ctk.CTkTextbox(self.main_frame, border_width=2, width=455, height=70, fg_color="#1E3A5F", border_color="white")  # Cambiar el tamaño
         self.text_area.grid(row=2, column=0, columnspan=2, padx=20, pady=20)  # Cambiar la posición y los márgenes
 
         self.text_area.insert("1.0", placeholder_text)
@@ -71,27 +71,53 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
 
 
         # Seccion 4: Metadata (Tema, Título, Fecha, Número de Autores)
-        self.metadata_frame = ctk.CTkFrame(self.main_frame)
+        self.metadata_frame = ctk.CTkFrame(self.main_frame, fg_color="#1E3A5F")
         self.metadata_frame.grid(row=3, column=0, columnspan=2, pady=10)
 
         # Tema
         self.tema_label = ctk.CTkLabel(self.metadata_frame, text="Tema:")
         self.tema_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+       
         self.tema_combobox = ttk.Combobox(self.metadata_frame, state="readonly")
         self.tema_combobox.grid(row=0, column=1, padx=10, pady=5, sticky="w")
+        style = ttk.Style()
+        style.theme_use("clam")
+
+        # Configurar el estilo del FECHA ESTO ES GLOBAL
+        style.configure("TCombobox",
+                        background="#1f6aa5",  # Color de fondo de la flechita
+                        fieldbackground="#1E3A5F",  # Color de fondo del campo de texto
+                        foreground="white",  # Color del texto
+                        bordercolor="white",  # Color del borde
+                        lightcolor="#1E3A5F",  # Color claro del borde
+                        darkcolor="#1E3A5F",  # Color oscuro del borde
+                        arrowcolor="white")  # Color de la flecha del combobox
+        # SELECCION TEMA ESTO ES GLOBAL
+        style.map("TCombobox",
+                  fieldbackground=[("readonly", "#1E3A5F")],
+                  background=[("readonly", "#1f6aa5")], #color de la flechida de fondo
+                  foreground=[("readonly", "white")],
+                  selectforeground=[("readonly", "white")],
+                  bordercolor=[("readonly", "white")],
+                  lightcolor=[("readonly", "#1E3A5F")],
+                  darkcolor=[("readonly", "#1E3A5F")],
+                  arrowcolor=[("readonly", "white")]) #color de la flechita
+
+        # Aplicar el estilo al Combobox
+        self.tema_combobox.configure(style="TCombobox")
         self.populate_tema_combobox()
 
         # Título
         self.titulo_label = ctk.CTkLabel(self.metadata_frame, text="Título:")
         self.titulo_label.grid(row=1, column=0, padx=10, pady=5, sticky="w")
-        self.titulo_entry = ctk.CTkEntry(self.metadata_frame, width=250)
+        self.titulo_entry = ctk.CTkEntry(self.metadata_frame, width=250, corner_radius=0, border_color="white", fg_color="#1E3A5F" )
         self.titulo_entry.grid(row=1, column=1, padx=10, pady=5, sticky="w")
         self.titulo_entry.bind("<KeyRelease>", self.check_titulo)
 
         # Fecha
         self.fecha_label = ctk.CTkLabel(self.metadata_frame, text="Fecha:")
         self.fecha_label.grid(row=2, column=0, padx=10, pady=5, sticky="w")
-        self.fecha_entry = DateEntry(self.metadata_frame, width=18, background="darkblue",
+        self.fecha_entry = DateEntry(self.metadata_frame, width=18, background="#1f6aa5",
                                      foreground="white", borderwidth=2, date_pattern="dd-mm-y")
         self.fecha_entry.grid(row=2, column=1, padx=10, pady=5, sticky="w")
 
@@ -107,20 +133,20 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         # Número de Autores
         self.num_autores_label = ctk.CTkLabel(self.metadata_frame, text="Número de Autor/Autores:")
         self.num_autores_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
-        self.num_autores_combobox = ttk.Combobox(self.metadata_frame, values=list(range(1, 11)), state="readonly")
+        self.num_autores_combobox = ttk.Combobox(self.metadata_frame, values=list(range(1, 6)), state="readonly")
         self.num_autores_combobox.grid(row=4, column=1, padx=10, pady=5, sticky="w")
         self.num_autores_combobox.bind("<<ComboboxSelected>>", self.update_autores_fields)
 
         # Número de Autores para "No" 
         self.num_autores_label_no = ctk.CTkLabel(self.metadata_frame, text="Número de Autor/Autores:")
-        self.num_autores_combobox_no = ttk.Combobox(self.metadata_frame, values=list(range(1, 11)), state="readonly")
+        self.num_autores_combobox_no = ttk.Combobox(self.metadata_frame, values=list(range(1, 6)), state="readonly")
         self.num_autores_combobox_no.bind("<<ComboboxSelected>>", self.update_cedula_fields)
 
         # Cédula Entry para "No"
         self.cedula_entries_no = []
 
         # Seccion 5: Autores campos dinamicos
-        self.autores_frame = ctk.CTkFrame(self.main_frame)
+        self.autores_frame = ctk.CTkFrame(self.main_frame, fg_color="#1E3A5F")  #aqui se debe hacer responsive 
         self.autores_frame.grid(row=4, column=0, columnspan=2, pady=10)
 
         # Cédula Entry para "No" 
@@ -136,7 +162,7 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.toggle_autores_fields()
 
         self.check_microphone()
-
+        
     def check_titulo(self, event):
         titulo = self.titulo_entry.get()
         if self.db_manager.titulo_existe(titulo):
@@ -214,7 +240,6 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
                 if self.no_audio_detected:
                     self.status_label.configure(text="Grabando...", text_color="red")
                     self.no_audio_detected = False
-
         stream.stop_stream()
         stream.close()
         p.terminate()
@@ -356,17 +381,17 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         for i in range(1, num_autores + 1):
             nombre_label = ctk.CTkLabel(self.autores_frame, text=f"Nombre Autor {i}:")
             nombre_label.grid(row=i, column=0, padx=5, pady=2, sticky="w")
-            nombre_entry = ctk.CTkEntry(self.autores_frame, width=200)
+            nombre_entry = ctk.CTkEntry(self.autores_frame, width=200, fg_color="#1E3A5F", border_color="white", border_width=2,   )
             nombre_entry.grid(row=i, column=1, padx=5, pady=2)
 
             apellido_label = ctk.CTkLabel(self.autores_frame, text=f"Apellido Autor {i}:")
             apellido_label.grid(row=i, column=2, padx=5, pady=2, sticky="w")
-            apellido_entry = ctk.CTkEntry(self.autores_frame, width=200)
+            apellido_entry = ctk.CTkEntry(self.autores_frame, width=200, fg_color="#1E3A5F", border_color="white", border_width=2,)
             apellido_entry.grid(row=i, column=3, padx=5, pady=2)
 
             cedula_label = ctk.CTkLabel(self.autores_frame, text=f"Cédula Autor {i}:")
             cedula_label.grid(row=i, column=4, padx=5, pady=2, sticky="w")
-            cedula_entry = ctk.CTkEntry(self.autores_frame, width=200, validate="key", validatecommand=(self.cedula_validation, '%P'))
+            cedula_entry = ctk.CTkEntry(self.autores_frame, width=200, validate="key", validatecommand=(self.cedula_validation, '%P'), fg_color="#1E3A5F",  border_color="white", border_width=2,)
             cedula_entry.grid(row=i, column=5, padx=5, pady=2)
 
     def toggle_autores_fields(self):
@@ -391,7 +416,11 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
             self.apellido_entry_no.grid_remove()
             self.num_autores_label_no.grid_remove()
             self.num_autores_combobox_no.grid_remove()
+            # Establecer el valor del combobox y llamar a update_autores_fields
+            self.num_autores_combobox.set("1") # ESTABLECER POR DEFECTO EL NUMERO DE LISTA A 1
+            self.update_autores_fields(None) # LLAMANDO FUNCION
         elif self.nuevo_usuario_var.get() == "no":
+          
             self.num_autores_label.grid_remove()
             self.num_autores_combobox.grid_remove()
             self.autores_frame.grid_remove()
@@ -402,6 +431,9 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
             self.buscar_button_no.grid_remove()
             self.nombre_entry_no.grid_remove()
             self.apellido_entry_no.grid_remove()
+            self.num_autores_combobox_no.set("1")  # Establecer valor predeterminado de 1
+            self.update_cedula_fields(None) # LLAMANDO
+    
         else:
             self.num_autores_label.grid_remove()
             self.num_autores_combobox.grid_remove()
@@ -427,7 +459,7 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         for i in range(num_autores):
             cedula_label = ctk.CTkLabel(self.metadata_frame, text=f"Ingrese Cédula {i + 1}:")
             cedula_label.grid(row=5 + i, column=0, padx=10, pady=5, sticky="w")
-            cedula_entry = ctk.CTkEntry(self.metadata_frame, width=250, validate="key", validatecommand=(self.cedula_validation, '%P'))
+            cedula_entry = ctk.CTkEntry(self.metadata_frame, width=250, validate="key", validatecommand=(self.cedula_validation, '%P'), fg_color="#1E3A5F", border_color="white", border_width=2,)
             cedula_entry.grid(row=5 + i, column=1, padx=10, pady=5, sticky="w")
             nombre_entry = ctk.CTkEntry(self.metadata_frame, width=250, state="readonly")
             apellido_entry = ctk.CTkEntry(self.metadata_frame, width=250, state="readonly")

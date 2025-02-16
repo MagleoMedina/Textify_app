@@ -57,7 +57,7 @@ class VentanaMain:
         self.logo_image = self.logo_image.resize((260, 250), Image.LANCZOS)  # Ajustar el tamaño de la imagen
         self.logo_photo = ImageTk.PhotoImage(self.logo_image)
         self.logo_label = ctk.CTkLabel(self.frame_modulo, image=self.logo_photo, text="")
-        self.logo_label.pack(pady=20, padx=20, anchor="center", expand=True)  # Ajustar el padding y centrar          
+        self.logo_label.pack(pady=40, padx=20, anchor="center", expand=True)  # Ajustar el padding y centrar          
     
     def limpiar_frame_modulo(self):
         for widget in self.frame_modulo.winfo_children():
@@ -95,5 +95,5 @@ class VentanaMain:
 
 if __name__ == "__main__":
     ventana = VentanaMain()
-    ventana.frame_modulo.place(relx=0.58, rely=0.43, anchor="center")  # Ajustar relx para mover a la derecha 
+    ventana.frame_modulo.place(relx=0.58, rely=0.50, anchor="center")  # Ajustar relx para mover a la derecha 
     ventana.run()
