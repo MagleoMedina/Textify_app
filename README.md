@@ -29,5 +29,5 @@ pip install -r requeriments.txt
 # Diagrama de la base de datos
 ![image](https://github.com/user-attachments/assets/c7e250f1-57b5-47fa-923d-e50be3f0c54b)
 
-#Archivo ejecutable (Utiliza pyinstaller)
+## Archivo ejecutable (Utiliza pyinstaller)
 pyinstaller --windowed --onefile --add-data "logoAudio.ico;." --add-data "logoAudio.png;." --icon=logoAudio.ico --add-data "database_tendencias.db;." --name "Textify" main.py
