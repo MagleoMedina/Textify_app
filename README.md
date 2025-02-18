@@ -1,4 +1,4 @@
-# Recorder_app
+# Textify
 # Proyecto de Grabación y Transcripción de Audio
 
 Este proyecto permite grabar audio, transcribirlo y guardar la transcripción junto con metadatos en una base de datos.
