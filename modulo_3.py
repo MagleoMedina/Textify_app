@@ -11,8 +11,9 @@ class App(ctk.CTkFrame):
         # Cambiar el color de fondo del frame principal a azul
         self.configure(fg_color="#1E3A5F")
 
-        # Base de datos
-        self.db_manager = db_manager.DBManager("database_tendencias.db")
+        #Base de datos
+        database_path = db_manager.DBManager.get_database_path()
+        self.db_manager = db_manager.DBManager(database_path)
 
         # Variables
         temas = self.db_manager.obtener_todos_los_temas()

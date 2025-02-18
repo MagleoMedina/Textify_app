@@ -98,19 +98,19 @@ class VentanaMain:
         self.title = ctk.CTkLabel(self.frame_botones, text="Textify", fg_color="#1E3A9F")
         self.title.grid(row=0, column=0, padx=10, pady=5, sticky="w")
         # Crear enlaces
-        self.boton_modulo1 = ctk.CTkLabel(self.frame_botones, text="Grabar archivos de audio", fg_color="#1E3A9F", cursor="hand2")
+        self.boton_modulo1 = ctk.CTkLabel(self.frame_botones, text="Grabar archivos de audio", fg_color="#5774DF", cursor="hand2", corner_radius=10)
         self.boton_modulo1.bind("<Button-1>", lambda e: self.mostrar_modulo_1())
         self.boton_modulo1.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
-        self.boton_modulo2 = ctk.CTkLabel(self.frame_botones, text="Subir archivos de audio", fg_color="#1E3A9F", cursor="hand2")
+        self.boton_modulo2 = ctk.CTkLabel(self.frame_botones, text="Subir archivos de audio", fg_color="#5774DF", cursor="hand2",corner_radius=10)
         self.boton_modulo2.bind("<Button-1>", lambda e: self.mostrar_modulo_2())
         self.boton_modulo2.grid(row=1, column=0, padx=10, pady=5, sticky="w")
 
-        self.boton_modulo3 = ctk.CTkLabel(self.frame_botones, text="Buscar archivos subidos", fg_color="#1E3A9F", cursor="hand2")
+        self.boton_modulo3 = ctk.CTkLabel(self.frame_botones, text="Buscar archivos subidos", fg_color="#5774DF", cursor="hand2", corner_radius=10)
         self.boton_modulo3.bind("<Button-1>", lambda e: self.mostrar_modulo_3())
         self.boton_modulo3.grid(row=2, column=0, padx=10, pady=5, sticky="w")
         
-        self.boton_cerrar = ctk.CTkLabel(self.frame_botones, text="Cerrar aplicacion", fg_color="#1E3A9F", cursor="hand2")
+        self.boton_cerrar = ctk.CTkLabel(self.frame_botones, text="Cerrar aplicacion", fg_color="#5774DF", cursor="hand2", corner_radius=10)
         self.boton_cerrar.bind("<Button-1>", lambda e: self.cerrar_aplicacion())
         self.boton_cerrar.grid(row=3, column=0, padx=10, pady=5, sticky="w")
         
@@ -126,7 +126,8 @@ class VentanaMain:
         self.frame_modulo.place(relx=0.5, rely=0.43, anchor="center")
         
         # Cargar y mostrar la imagen en el frame_modulo
-        self.logo_image = Image.open("logoAudio.ico")
+        image_path = self.get_resource_path("logoAudio.ico")
+        self.logo_image = Image.open(image_path)
         self.logo_image = self.logo_image.resize((260, 250), Image.LANCZOS)  # Ajustar el tamaño de la imagen
         self.logo_photo = ImageTk.PhotoImage(self.logo_image)
         self.logo_label = ctk.CTkLabel(self.frame_modulo, image=self.logo_photo, text="")
@@ -168,10 +169,10 @@ class VentanaMain:
         self.root.mainloop()
 
 if __name__ == "__main__":
-    #splash_root = tk.Tk()
-    #splash = SplashScreen(splash_root)
-    #splash.show()
-    #splash_root.mainloop()
+    splash_root = tk.Tk()
+    splash = SplashScreen(splash_root)
+    splash.show()
+    splash_root.mainloop()
     
     ventana = VentanaMain()
     ventana.frame_modulo.place(relx=0.58, rely=0.50, anchor="center")  # Ajustar relx para mover a la derecha 

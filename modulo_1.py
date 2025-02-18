@@ -28,7 +28,8 @@ class AudioRecorderApp(ctk.CTkFrame):  # Cambiar la herencia a CTkFrame
         self.processing = False
 
         #Base de datos
-        self.db_manager = db_manager.DBManager("database_tendencias.db")
+        database_path = db_manager.DBManager.get_database_path()
+        self.db_manager = db_manager.DBManager(database_path)
 
         # Registra una función de validación para el ingreso de cédulas
         self.cedula_validation = self.register(self.validate_cedula)

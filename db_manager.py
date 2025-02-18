@@ -1,5 +1,7 @@
 import sqlite3
-
+import sys
+import os
+import shutil
 class DBManager:
     def __init__(self, db_name):
         """
@@ -18,7 +20,7 @@ class DBManager:
         try:
             self.connection = sqlite3.connect(self.db_name)
             self.cursor = self.connection.cursor()
-            print("Conexión establecida con la base de datos.")
+           # print("Conexión establecida con la base de datos.")
         except sqlite3.Error as e:
             print(f"Error al conectar con la base de datos: {e}")
 
@@ -243,11 +245,33 @@ class DBManager:
         WHERE Tema.Nombre = ?;
         """
         return self.fetch_all(query, (tema_nombre,))
+    
+    def get_database_path():
+        if getattr(sys, 'frozen', False):  # Si el script está empaquetado como .exe
+            base_path = sys._MEIPASS
+        else:
+            base_path = os.path.dirname(__file__)  # Modo normal de ejecución
+
+        # Ruta donde queremos almacenar la base de datos
+        user_data_dir = os.path.join(os.getenv('APPDATA'), "Textify")  # Carpeta en AppData
+        db_destination = os.path.join(user_data_dir, "database_tendencias.db")
+
+        # Crear la carpeta si no existe
+        if not os.path.exists(user_data_dir):
+            os.makedirs(user_data_dir)
+
+        # Si la base de datos no existe en la carpeta persistente, copiarla desde el paquete
+        if not os.path.exists(db_destination):
+            shutil.copy(os.path.join(base_path, "database_tendencias.db"), db_destination)
+
+        return db_destination  # Devolver la ruta fija
 
 
 
 # Ejemplo de uso
 if __name__ == "__main__":
+    database_path = DBManager.get_database_path()
+
     db = DBManager("database_tendencias.db")
 
     # Crear las tablas desde el esquema
