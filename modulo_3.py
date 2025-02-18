@@ -7,9 +7,13 @@ class App(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
         self.pack(fill="both", expand=True)
+        
+        # Cambiar el color de fondo del frame principal a azul
+        self.configure(fg_color="#1E3A5F")
 
-        # Base de datos
-        self.db_manager = db_manager.DBManager("database_tendencias.db")
+        #Base de datos
+        database_path = db_manager.DBManager.get_database_path()
+        self.db_manager = db_manager.DBManager(database_path)
 
         # Variables
         temas = self.db_manager.obtener_todos_los_temas()
@@ -17,22 +21,24 @@ class App(ctk.CTkFrame):
 
         # Agregar el Entry principal
         self.entry = ctk.CTkEntry(self, placeholder_text="Escribe para buscar...",
-                                  width=850, height=45, corner_radius=10)
+                                  width=100, height=45, corner_radius=10, fg_color="#1E3A5F", border_color="white")
         self.entry.grid(row=0, column=0, columnspan=3, padx=20, pady=20, sticky="nsew")
 
         # Configurar widgets distribuidos horizontalmente
         self.botton1 = ctk.CTkButton(self, text="BUSCAR POR TÍTULO",
-                                     corner_radius=10, width=240,
+                                     corner_radius=10, width=200,
                                      command=self.buscar_por_titulo)
         self.botton1.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
 
         self.combobox = ctk.CTkComboBox(self, values=temas,
-                                        corner_radius=10, width=240, fg_color="#1f6aa5", border_width=0,
+                                        corner_radius=10, width=185, fg_color="#1f6aa5", border_width=0,
+                                        dropdown_fg_color="#1f6aa5", dropdown_hover_color="#1E3A5F",
+                                        button_color="#1f6a8c", button_hover_color="#1f6a8c",
                                         command=self.buscar_por_tema)
         self.combobox.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
 
         self.botton3 = ctk.CTkButton(self, text="BUSCAR POR PALABRA CLAVE",
-                                     corner_radius=10, width=240,
+                                     corner_radius=10, width=200,
                                      command=self.buscar_por_palabra_clave)
         self.botton3.grid(row=1, column=2, padx=10, pady=10, sticky="ew")
 
@@ -40,7 +46,7 @@ class App(ctk.CTkFrame):
         self.resultados.grid(row=2, column=0, sticky="w", padx=10)
 
         # Agregar un Canvas y Scrollbar para los resultados
-        self.canvas = ctk.CTkCanvas(self, width=850, height=280, bg='#333333', highlightthickness=0)
+        self.canvas = ctk.CTkCanvas(self, width=850, height=280, bg='#1E3A5F', highlightthickness=0)
         self.canvas.grid(row=3, columnspan=3, padx=10, pady=10, sticky="ew")
 
         self.scrollbar = ctk.CTkScrollbar(self, orientation="vertical", command=self.canvas.yview)
@@ -48,7 +54,7 @@ class App(ctk.CTkFrame):
 
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
-        self.scrollable_frame = ctk.CTkFrame(self.canvas, width=850)
+        self.scrollable_frame = ctk.CTkFrame(self.canvas, width=850, fg_color="#1E3A5F")
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
         # Configurar que el scrollable_frame ajuste su tamaño cuando se añadan widgets
@@ -67,7 +73,7 @@ class App(ctk.CTkFrame):
         if resultados:
             for idx, (id_, titulo, _, texto) in enumerate(resultados):
                 # Mostrar el título
-                label = ctk.CTkLabel(self.scrollable_frame, text=f"{idx + 1}. {titulo}")
+                label = ctk.CTkLabel(self.scrollable_frame, text=f"{idx + 1}. {titulo}", fg_color="#1E3A5F")
                 label.grid(row=idx, column=0, padx=10, pady=5, sticky="w")
 
                 # Botón para ver el texto
@@ -76,11 +82,11 @@ class App(ctk.CTkFrame):
                 ver_btn.grid(row=idx, column=1, padx=5, pady=5)
 
                 # Botón para descargar el texto
-                descargar_btn = ctk.CTkButton(self.scrollable_frame, text="Descargar", width=100,
+                descargar_btn = ctk.CTkButton(self.scrollable_frame, text="Descargar", width=100, fg_color="green",
                                               command=lambda t=texto, title=titulo: self.descargar_texto(t, title))
                 descargar_btn.grid(row=idx, column=2, padx=5, pady=5)
         else:
-            no_result_label = ctk.CTkLabel(self.scrollable_frame, text="No hay resultados.")
+            no_result_label = ctk.CTkLabel(self.scrollable_frame, text="No hay resultados.", fg_color="#1E3A5F")
             no_result_label.pack(anchor="center", padx=10, pady=10)
 
     def ver_texto(self, texto):
